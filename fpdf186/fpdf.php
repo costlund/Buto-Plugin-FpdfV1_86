@@ -408,7 +408,7 @@ function GetStringWidth($s)
 	$cw = $this->CurrentFont['cw'];
 	$w = 0;
 	$s = (string)$s;
-	$l = strlen($s);
+	$l = wfPhpfunc::strlen($s);
 	for($i=0;$i<$l;$i++)
 		$w += $cw[$s[$i]];
 	return $w*$this->FontSize/1000;
@@ -445,7 +445,7 @@ function AddFont($family, $style='', $file='', $dir='')
 	// Add a TrueType, OpenType or Type1 font
 	$family = strtolower($family);
 	if($file=='')
-		$file = str_replace(' ','',$family).strtolower($style).'.php';
+		$file = wfPhpfunc::str_replace(' ','',$family).strtolower($style).'.php';
 	$style = strtoupper($style);
 	if($style=='IB')
 		$style = 'BI';
@@ -456,7 +456,7 @@ function AddFont($family, $style='', $file='', $dir='')
 		$this->Error('Incorrect font definition file name: '.$file);
 	if($dir=='')
 		$dir = $this->fontpath;
-	if(substr($dir,-1)!='/' && substr($dir,-1)!='\\')
+	if(wfPhpfunc::substr($dir,-1)!='/' && wfPhpfunc::substr($dir,-1)!='\\')
 		$dir .= '/';
 	$info = $this->_loadfont($dir.$file);
 	$info['i'] = count($this->fonts)+1;
@@ -483,7 +483,7 @@ function SetFont($family, $style='', $size=0)
 	if(strpos($style,'U')!==false)
 	{
 		$this->underline = true;
-		$style = str_replace('U','',$style);
+		$style = wfPhpfunc::str_replace('U','',$style);
 	}
 	else
 		$this->underline = false;
@@ -667,8 +667,8 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 	if($w==0)
 		$w = $this->w-$this->rMargin-$this->x;
 	$wmax = ($w-2*$this->cMargin)*1000/$this->FontSize;
-	$s = str_replace("\r",'',(string)$txt);
-	$nb = strlen($s);
+	$s = wfPhpfunc::str_replace("\r",'',(string)$txt);
+	$nb = wfPhpfunc::strlen($s);
 	if($nb>0 && $s[$nb-1]=="\n")
 		$nb--;
 	$b = 0;
@@ -708,7 +708,7 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 				$this->ws = 0;
 				$this->_out('0 Tw');
 			}
-			$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+			$this->Cell($w,$h,wfPhpfunc::substr($s,$j,$i-$j),$b,2,$align,$fill);
 			$i++;
 			$sep = -1;
 			$j = $i;
@@ -738,7 +738,7 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 					$this->ws = 0;
 					$this->_out('0 Tw');
 				}
-				$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+				$this->Cell($w,$h,wfPhpfunc::substr($s,$j,$i-$j),$b,2,$align,$fill);
 			}
 			else
 			{
@@ -747,7 +747,7 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 					$this->ws = ($ns>1) ? ($wmax-$ls)/1000*$this->FontSize/($ns-1) : 0;
 					$this->_out(sprintf('%.3F Tw',$this->ws*$this->k));
 				}
-				$this->Cell($w,$h,substr($s,$j,$sep-$j),$b,2,$align,$fill);
+				$this->Cell($w,$h,wfPhpfunc::substr($s,$j,$sep-$j),$b,2,$align,$fill);
 				$i = $sep+1;
 			}
 			$sep = -1;
@@ -769,7 +769,7 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 	}
 	if($border && strpos($border,'B')!==false)
 		$b .= 'B';
-	$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+	$this->Cell($w,$h,wfPhpfunc::substr($s,$j,$i-$j),$b,2,$align,$fill);
 	$this->x = $this->lMargin;
 }
 
@@ -781,8 +781,8 @@ function Write($h, $txt, $link='')
 	$cw = $this->CurrentFont['cw'];
 	$w = $this->w-$this->rMargin-$this->x;
 	$wmax = ($w-2*$this->cMargin)*1000/$this->FontSize;
-	$s = str_replace("\r",'',(string)$txt);
-	$nb = strlen($s);
+	$s = wfPhpfunc::str_replace("\r",'',(string)$txt);
+	$nb = wfPhpfunc::strlen($s);
 	$sep = -1;
 	$i = 0;
 	$j = 0;
@@ -795,7 +795,7 @@ function Write($h, $txt, $link='')
 		if($c=="\n")
 		{
 			// Explicit line break
-			$this->Cell($w,$h,substr($s,$j,$i-$j),0,2,'',false,$link);
+			$this->Cell($w,$h,wfPhpfunc::substr($s,$j,$i-$j),0,2,'',false,$link);
 			$i++;
 			$sep = -1;
 			$j = $i;
@@ -830,11 +830,11 @@ function Write($h, $txt, $link='')
 				}
 				if($i==$j)
 					$i++;
-				$this->Cell($w,$h,substr($s,$j,$i-$j),0,2,'',false,$link);
+				$this->Cell($w,$h,wfPhpfunc::substr($s,$j,$i-$j),0,2,'',false,$link);
 			}
 			else
 			{
-				$this->Cell($w,$h,substr($s,$j,$sep-$j),0,2,'',false,$link);
+				$this->Cell($w,$h,wfPhpfunc::substr($s,$j,$sep-$j),0,2,'',false,$link);
 				$i = $sep+1;
 			}
 			$sep = -1;
@@ -853,7 +853,7 @@ function Write($h, $txt, $link='')
 	}
 	// Last chunk
 	if($i!=$j)
-		$this->Cell($l/1000*$this->FontSize,$h,substr($s,$j),0,0,'',false,$link);
+		$this->Cell($l/1000*$this->FontSize,$h,wfPhpfunc::substr($s,$j),0,0,'',false,$link);
 }
 
 function Ln($h=null)
@@ -879,7 +879,7 @@ function Image($file, $x=null, $y=null, $w=0, $h=0, $type='', $link='')
 			$pos = strrpos($file,'.');
 			if(!$pos)
 				$this->Error('Image file has no extension and no type was specified: '.$file);
-			$type = substr($file,$pos+1);
+			$type = wfPhpfunc::substr($file,$pos+1);
 		}
 		$type = strtolower($type);
 		if($type=='jpeg')
@@ -986,7 +986,7 @@ function Output($dest='', $name='', $isUTF8=false)
 {
 	// Output PDF to some destination
 	$this->Close();
-	if(strlen($name)==1 && strlen($dest)!=1)
+	if(wfPhpfunc::strlen($name)==1 && wfPhpfunc::strlen($dest)!=1)
 	{
 		// Fix parameter order
 		$tmp = $dest;
@@ -1147,7 +1147,7 @@ protected function _loadfont($path)
 protected function _isascii($s)
 {
 	// Test if string is ASCII
-	$nb = strlen($s);
+	$nb = wfPhpfunc::strlen($s);
 	for($i=0;$i<$nb;$i++)
 	{
 		if(ord($s[$i])>127)
@@ -1172,7 +1172,7 @@ protected function _UTF8encode($s)
 	if($this->iconv)
 		return iconv('ISO-8859-1','UTF-8',$s);
 	$res = '';
-	$nb = strlen($s);
+	$nb = wfPhpfunc::strlen($s);
 	for($i=0;$i<$nb;$i++)
 	{
 		$c = $s[$i];
@@ -1194,7 +1194,7 @@ protected function _UTF8toUTF16($s)
 	$res = "\xFE\xFF";
 	if($this->iconv)
 		return $res.iconv('UTF-8','UTF-16BE',$s);
-	$nb = strlen($s);
+	$nb = wfPhpfunc::strlen($s);
 	$i = 0;
 	while($i<$nb)
 	{
@@ -1227,7 +1227,7 @@ protected function _escape($s)
 {
 	// Escape special characters
 	if(strpos($s,'(')!==false || strpos($s,')')!==false || strpos($s,'\\')!==false || strpos($s,"\r")!==false)
-		return str_replace(array('\\','(',')',"\r"), array('\\\\','\\(','\\)','\\r'), $s);
+		return wfPhpfunc::str_replace(array('\\','(',')',"\r"), array('\\\\','\\(','\\)','\\r'), $s);
 	else
 		return $s;
 }
@@ -1331,9 +1331,9 @@ protected function _parsepngstream($f, $file)
 			// Read transparency info
 			$t = $this->_readstream($f,$n);
 			if($ct==0)
-				$trns = array(ord(substr($t,1,1)));
+				$trns = array(ord(wfPhpfunc::substr($t,1,1)));
 			elseif($ct==2)
-				$trns = array(ord(substr($t,1,1)), ord(substr($t,3,1)), ord(substr($t,5,1)));
+				$trns = array(ord(wfPhpfunc::substr($t,1,1)), ord(wfPhpfunc::substr($t,3,1)), ord(wfPhpfunc::substr($t,5,1)));
 			else
 			{
 				$pos = strpos($t,chr(0));
@@ -1375,7 +1375,7 @@ protected function _parsepngstream($f, $file)
 				$pos = (1+$len)*$i;
 				$color .= $data[$pos];
 				$alpha .= $data[$pos];
-				$line = substr($data,$pos+1,$len);
+				$line = wfPhpfunc::substr($data,$pos+1,$len);
 				$color .= preg_replace('/(.)./s','$1',$line);
 				$alpha .= preg_replace('/.(.)/s','$1',$line);
 			}
@@ -1389,7 +1389,7 @@ protected function _parsepngstream($f, $file)
 				$pos = (1+$len)*$i;
 				$color .= $data[$pos];
 				$alpha .= $data[$pos];
-				$line = substr($data,$pos+1,$len);
+				$line = wfPhpfunc::substr($data,$pos+1,$len);
 				$color .= preg_replace('/(.{3})./s','$1',$line);
 				$alpha .= preg_replace('/.{3}(.)/s','$1',$line);
 			}
@@ -1414,7 +1414,7 @@ protected function _readstream($f, $n)
 		$s = fread($f,$n);
 		if($s===false)
 			$this->Error('Error while reading stream');
-		$n -= strlen($s);
+		$n -= wfPhpfunc::strlen($s);
 		$res .= $s;
 	}
 	if($n>0)
@@ -1475,7 +1475,7 @@ protected function _put($s)
 
 protected function _getoffset()
 {
-	return strlen($this->buffer);
+	return wfPhpfunc::strlen($this->buffer);
 }
 
 protected function _newobj($n=null)
@@ -1557,7 +1557,7 @@ protected function _putpage($n)
 	$this->_put('endobj');
 	// Page content
 	if(!empty($this->AliasNbPages))
-		$this->pages[$n] = str_replace($this->AliasNbPages,$this->page,$this->pages[$n]);
+		$this->pages[$n] = wfPhpfunc::str_replace($this->AliasNbPages,$this->page,$this->pages[$n]);
 	$this->_putstreamobject($this->pages[$n]);
 	// Link annotations
 	$this->_putlinks($n);
@@ -1611,9 +1611,9 @@ protected function _putfonts()
 		$font = file_get_contents($file);
 		if(!$font)
 			$this->Error('Font file not found: '.$file);
-		$compressed = (substr($file,-2)=='.z');
+		$compressed = (wfPhpfunc::substr($file,-2)=='.z');
 		if(!$compressed && isset($info['length2']))
-			$font = substr($font,6,$info['length1']).substr($font,6+$info['length1']+6,$info['length2']);
+			$font = wfPhpfunc::substr($font,6,$info['length1']).substr($font,6+$info['length1']+6,$info['length2']);
 		$this->_put('<</Length '.strlen($font));
 		if($compressed)
 			$this->_put('/Filter /FlateDecode');
@@ -1788,7 +1788,7 @@ protected function _putimage(&$info)
 	$this->_put('/Width '.$info['w']);
 	$this->_put('/Height '.$info['h']);
 	if($info['cs']=='Indexed')
-		$this->_put('/ColorSpace [/Indexed /DeviceRGB '.(strlen($info['pal'])/3-1).' '.($this->n+1).' 0 R]');
+		$this->_put('/ColorSpace [/Indexed /DeviceRGB '.(wfPhpfunc::strlen($info['pal'])/3-1).' '.($this->n+1).' 0 R]');
 	else
 	{
 		$this->_put('/ColorSpace /'.$info['cs']);

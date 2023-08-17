@@ -11,7 +11,7 @@ protected $HREF = '';
 function WriteHTML($html)
 {
 	// HTML parser
-	$html = str_replace("\n",' ',$html);
+	$html = wfPhpfunc::str_replace("\n",' ',$html);
 	$a = preg_split('/<(.*)>/U',$html,-1,PREG_SPLIT_DELIM_CAPTURE);
 	foreach($a as $i=>$e)
 	{
@@ -27,7 +27,7 @@ function WriteHTML($html)
 		{
 			// Tag
 			if($e[0]=='/')
-				$this->CloseTag(strtoupper(substr($e,1)));
+				$this->CloseTag(strtoupper(wfPhpfunc::substr($e,1)));
 			else
 			{
 				// Extract attributes

@@ -278,7 +278,7 @@ class TTFParser
 				// PostScript name
 				fseek($this->f, $tableOffset+$stringOffset+$offset, SEEK_SET);
 				$s = $this->Read($length);
-				$s = str_replace(chr(0), '', $s);
+				$s = wfPhpfunc::str_replace(chr(0), '', $s);
 				$s = preg_replace('|[ \[\](){}<>/%]|', '', $s);
 				$this->postScriptName = $s;
 				break;
@@ -432,7 +432,7 @@ class TTFParser
 			{
 				// Segment with multiple chars
 				$idDelta[] = 0;
-				$idRangeOffset[] = strlen($glyphIdArray) + ($segCount-$i)*2;
+				$idRangeOffset[] = wfPhpfunc::strlen($glyphIdArray) + ($segCount-$i)*2;
 				for($c=$start;$c<=$end;$c++)
 				{
 					$ssid = $this->glyphs[$this->chars[$c]]['ssid'];
@@ -564,7 +564,7 @@ class TTFParser
 				if(is_string($name))
 				{
 					$data .= pack('n', 258+$numNames);
-					$names .= chr(strlen($name)).$name;
+					$names .= chr(wfPhpfunc::strlen($name)).$name;
 					$numNames++;
 				}
 				else
@@ -597,7 +597,7 @@ class TTFParser
 			if(!isset($this->tables[$tag]['data']))
 				$this->LoadTable($tag);
 			$this->tables[$tag]['offset'] = $offset;
-			$offset += strlen($this->tables[$tag]['data']);
+			$offset += wfPhpfunc::strlen($this->tables[$tag]['data']);
 		}
 
 		// Build offset table
@@ -646,7 +646,7 @@ class TTFParser
 
 	function SetTable($tag, $data)
 	{
-		$length = strlen($data);
+		$length = wfPhpfunc::strlen($data);
 		$n = $length % 4;
 		if($n>0)
 			$data = str_pad($data, $length+4-$n, "\x00");
@@ -695,7 +695,7 @@ class TTFParser
 
 	function CheckSum($s)
 	{
-		$n = strlen($s);
+		$n = wfPhpfunc::strlen($s);
 		$high = 0;
 		$low = 0;
 		for($i=0;$i<$n;$i+=4)

@@ -51,8 +51,8 @@ function LoadMap($enc)
 	foreach($a as $line)
 	{
 		$e = explode(' ', rtrim($line));
-		$c = hexdec(substr($e[0],1));
-		$uv = hexdec(substr($e[1],2));
+		$c = hexdec(wfPhpfunc::substr($e[0],1));
+		$uv = hexdec(wfPhpfunc::substr($e[1],2));
 		$name = $e[2];
 		$map[$c] = array('uv'=>$uv, 'name'=>$name);
 	}
@@ -88,7 +88,7 @@ function GetInfoFromTrueType($file, $embed, $subset, $map)
 		}
 		else
 			$info['Data'] = file_get_contents($file);
-		$info['OriginalSize'] = strlen($info['Data']);
+		$info['OriginalSize'] = wfPhpfunc::strlen($info['Data']);
 	}
 	$k = 1000/$ttf->unitsPerEm;
 	$info['FontName'] = $ttf->postScriptName;
@@ -147,7 +147,7 @@ function GetInfoFromType1($file, $embed, $map)
 		$info['Size2'] = $size2;
 	}
 
-	$afm = substr($file, 0, -3).'afm';
+	$afm = wfPhpfunc::substr($file, 0, -3).'afm';
 	if(!file_exists($afm))
 		Error('AFM font file not found: '.$afm);
 	$a = file($afm);
@@ -386,7 +386,7 @@ function MakeFont($fontfile, $enc='cp1252', $embed=true, $subset=true)
 	// Generate a font definition file
 	if(!file_exists($fontfile))
 		Error('Font file not found: '.$fontfile);
-	$ext = strtolower(substr($fontfile,-3));
+	$ext = strtolower(wfPhpfunc::substr($fontfile,-3));
 	if($ext=='ttf' || $ext=='otf')
 		$type = 'TrueType';
 	elseif($ext=='pfb')
@@ -401,7 +401,7 @@ function MakeFont($fontfile, $enc='cp1252', $embed=true, $subset=true)
 	else
 		$info = GetInfoFromType1($fontfile, $embed, $map);
 
-	$basename = substr(basename($fontfile), 0, -4);
+	$basename = wfPhpfunc::substr(basename($fontfile), 0, -4);
 	if($embed)
 	{
 		if(function_exists('gzcompress'))
